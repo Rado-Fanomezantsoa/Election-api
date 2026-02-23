@@ -1,5 +1,8 @@
 package org.election;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -7,5 +10,8 @@ public class Main {
         DateRetriever dr = new DateRetriever();
         long totalVotes = dr.countAllVotes();
         System.out.println("Total votes: " + totalVotes);
+
+        List<VoteTypeCount> voteTypeCounts = dr.countVotesByType();
+        System.out.println(voteTypeCounts);
     }
 }
