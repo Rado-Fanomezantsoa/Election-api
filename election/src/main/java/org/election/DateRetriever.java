@@ -51,4 +51,29 @@ public class DateRetriever {
             throw new RuntimeException(e);
         }
     }
+
+    //3
+    List<CandidateVoteCount> countValidVotesByCandidate(){
+        List<CandidateVoteCount> candidateVoteCounts = new ArrayList<CandidateVoteCount>();
+        String sql = """
+                Select candidate.name as candidate_name, count(case when vote.vote_type = 'VALID'Then 1 END) as valid_vote
+                from candidate
+                left join vote on vote.candidate_id =  candidate.id
+                group by candidate.id, candidate.name order by name;
+        """;
+        try(
+                Connection connection = new DbConnection().getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery();
+                ){
+            while(resultSet.next()) {
+                String candidateName = resultSet.getString("candidate_name");
+                int validVoteCount = resultSet.getInt("valid_vote");
+                candidateVoteCounts.add(new CandidateVoteCount(candidateName, validVoteCount));
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        };
+        return candidateVoteCounts;
+    }
 }

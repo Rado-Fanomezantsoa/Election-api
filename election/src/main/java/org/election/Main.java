@@ -13,5 +13,8 @@ public class Main {
 
         List<VoteTypeCount> voteTypeCounts = dr.countVotesByType();
         System.out.println(voteTypeCounts);
+
+        List<CandidateVoteCount> validVoteCounts = dr.countValidVotesByCandidate();
+        System.out.println(validVoteCounts);
     }
 }
