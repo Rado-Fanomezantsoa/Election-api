@@ -76,4 +76,31 @@ public class DateRetriever {
         };
         return candidateVoteCounts;
     }
+
+    //4
+    public VoteSummary computeVoteSummary() {
+        VoteSummary summary = null;
+        String sql = """
+        SELECT
+            SUM(CASE WHEN vote_type = 'VALID' THEN 1 ELSE 0 END) AS valid_count,
+            SUM(CASE WHEN vote_type = 'BLANK' THEN 1 ELSE 0 END) AS blank_count,
+            SUM(CASE WHEN vote_type = 'NULL' THEN 1 ELSE 0 END) AS null_count
+        FROM
+            vote;
+    """;
+        try (Connection connection = new DbConnection().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                int validCount = resultSet.getInt("valid_count");
+                int blankCount = resultSet.getInt("blank_count");
+                int nullCount = resultSet.getInt("null_count");
+                summary = new VoteSummary(validCount, blankCount, nullCount);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return summary;
+    }
+
 }

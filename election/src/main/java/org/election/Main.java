@@ -8,13 +8,15 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         DateRetriever dr = new DateRetriever();
-        long totalVotes = dr.countAllVotes();
+        /*long totalVotes = dr.countAllVotes();
         System.out.println("Total votes: " + totalVotes);
 
         List<VoteTypeCount> voteTypeCounts = dr.countVotesByType();
         System.out.println(voteTypeCounts);
 
         List<CandidateVoteCount> validVoteCounts = dr.countValidVotesByCandidate();
-        System.out.println(validVoteCounts);
+        System.out.println(validVoteCounts);*/
+        VoteSummary voteSummary = dr.computeVoteSummary();
+        System.out.println(voteSummary);
     }
 }
