@@ -103,4 +103,26 @@ public class DateRetriever {
         return summary;
     }
 
+    //5
+    public double computeTurnoutRate() {
+        double turnoutRate = 0.0;
+        String sql = """
+        SELECT 
+            (CAST(COUNT(DISTINCT v.voter_id) AS DOUBLE PRECISION) / 
+            (SELECT COUNT(id) FROM voter)) * 100 AS turnout_rate
+        FROM 
+            vote v;
+    """;
+        try (Connection connection = new DbConnection().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                turnoutRate = resultSet.getDouble("turnout_rate");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return turnoutRate;
+    }
+
 }

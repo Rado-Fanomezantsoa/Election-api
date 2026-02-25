@@ -18,5 +18,8 @@ public class Main {
         System.out.println(validVoteCounts);*/
         VoteSummary voteSummary = dr.computeVoteSummary();
         System.out.println(voteSummary);
+
+        double computerVoter = dr.computeTurnoutRate();
+        System.out.println(computerVoter);
     }
 }
