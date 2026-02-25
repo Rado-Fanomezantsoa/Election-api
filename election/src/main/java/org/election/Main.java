@@ -21,5 +21,8 @@ public class Main {
 
         double computerVoter = dr.computeTurnoutRate();
         System.out.println(computerVoter);
+
+        ElectionResult result = dr.findWinner();
+        System.out.println(result);
     }
 }

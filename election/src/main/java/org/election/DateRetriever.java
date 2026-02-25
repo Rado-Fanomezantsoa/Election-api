@@ -125,4 +125,34 @@ public class DateRetriever {
         return turnoutRate;
     }
 
+    //6
+    public ElectionResult findWinner() {
+        ElectionResult result = null;
+        String sql = """
+        SELECT
+            c.name AS candidate_name,
+            COUNT(CASE WHEN v.vote_type = 'VALID' THEN 1 END) AS valid_vote_count
+        FROM
+            candidate c
+        LEFT JOIN
+            vote v ON c.id = v.candidate_id
+        GROUP BY
+            c.id, c.name
+        ORDER BY
+            valid_vote_count DESC
+        LIMIT 1;
+    """;
+        try (Connection connection = new DbConnection().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                String candidateName = resultSet.getString("candidate_name");
+                int validVoteCount = resultSet.getInt("valid_vote_count");
+                result = new ElectionResult(candidateName, validVoteCount);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 }
